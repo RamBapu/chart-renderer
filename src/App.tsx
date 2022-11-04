@@ -1,24 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./HighChartsStyles.css";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
+import { data } from "./config";
 
 function App() {
+  const numberOfCharts = 4;
+  const optionsArray: any[] = [];
+  data.map((dataEl) => {
+    let options = {
+      chart: { type: "area"},
+      accessibility: {
+        description: dataEl.description,
+      },
+      title: {
+        text: dataEl.label,
+      },
+      subtitle: {
+        text: dataEl.subLabel,
+      },
+      xAxis: {
+        title: {
+          text: dataEl.xAxisTitle,
+        },
+        categories: dataEl.xAxisCategories,
+      },
+      yAxis: {
+        title: {
+          text: dataEl.yAxisTitle,
+        },
+      },
+      tooltip: {
+        pointFormat: dataEl.toolTipPointFormat,
+      },
+      legend: {
+        enabled: dataEl.legendToggle,
+      },
+      plotOptions: dataEl.plotOptions,
+      series: dataEl.series,
+    };
+    optionsArray.push(options);
+  });
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="data-container"> 
+      {optionsArray.map((optionsEl) => (
+        <HighchartsReact containerProps={{ style: { width: "300px", height: "300px" } }}highcharts={Highcharts} options={optionsEl} />
+      ))}
+      </div>
     </div>
   );
 }
